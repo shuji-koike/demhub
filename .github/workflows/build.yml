@@ -17,7 +17,7 @@ jobs:
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
       - run: yarn prettier -c .
       - run: yarn eslint .
-      - run: yarn tsc
+      - run: yarn tsc --noEmit
       - run: touch static/main.wasm
       - run: yarn vite build
   build_go:

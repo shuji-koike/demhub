@@ -1,3 +1,4 @@
+import { Text } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
@@ -83,6 +84,7 @@ const StyledDemoMenu = styled.div`
   > nav {
     position: sticky;
     top: 0;
+    z-index: 1;
   }
 `
 
@@ -92,13 +94,8 @@ const PlayerLabel: React.VFC<{
 }> = ({ player, onClick }) => {
   if (!player) return <></>
   return (
-    <StyledPlayerLabel player={player} onClick={onClick}>
+    <Text onClick={onClick} fontWeight="bold" color={teamColor(player.Team)}>
       {player.Name}
-    </StyledPlayerLabel>
+    </Text>
   )
 }
-
-const StyledPlayerLabel = styled.span<{ player: Player }>`
-  font-weight: bold;
-  color: ${(p) => teamColor(p.player.Team)};
-`

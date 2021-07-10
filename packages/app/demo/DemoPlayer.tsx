@@ -87,7 +87,7 @@ export const DemoPlayer: React.VFC<{
       onWheel={onWheel}
       onSubmit={(e) => e.preventDefault()}
     >
-      <HeaderSlot deps={[currentRound]}>
+      <HeaderSlot>
         <DemoNav match={match} round={round} onChange={setRound} />
       </HeaderSlot>
       <article>
