@@ -3,6 +3,9 @@ import * as functions from "firebase-functions"
 
 const { logger } = functions
 
+// eslint-disable-next-line
+const config: () => { key: { steam: string } } = () => functions.config() as any
+
 export const helloWorld = functions
   .region("asia-northeast1")
   .https.onRequest((req, res) => {
@@ -17,9 +20,9 @@ export const getPlayerSummaries = functions
   .https.onCall(async ({ steamids }) => {
     logger.debug(steamids)
     const { data } = await axios.get(
-      "https:/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/",
+      "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/",
       {
-        params: { steamids, key: process.env["STEAM_API_KEY"] },
+        params: { steamids, key: config().key.steam },
       }
     )
     logger.debug(data)

@@ -10,7 +10,7 @@ export interface SteamUser {
 export type SteamUsers = Record<string, SteamUser>
 
 export function useSteamUsers(ids: number[] = []): SteamUsers {
-  const data = { steamids: [...new Set(ids)].sort() }
+  const data = { steamids: [...new Set(ids)].sort().join(",") }
   const [state, setState] = useState<SteamUsers>({})
   useEffect(() => {
     getPlayerSummaries(data).then(setState)
@@ -19,13 +19,16 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
 }
 
 async function getPlayerSummaries(data: {
-  steamids: number[]
+  steamids: string
 }): Promise<SteamUsers> {
-  const {
-    data: { players },
-  }: {
-    data: { players?: SteamUser[] }
-  } = await firebase.functions().httpsCallable("getPlayerSummaries")(data)
-  if (!players) throw Error()
+  const players = await firebase
+    .app()
+    .functions("asia-northeast1")
+    .httpsCallable("getPlayerSummaries")(data)
+    .then<SteamUser[]>((e) => e.data?.response?.players)
+  if (!players) {
+    console.error("getPlayerSummaries")
+    return {}
+  }
   return players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {})
 }
