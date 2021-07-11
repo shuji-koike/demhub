@@ -1,26 +1,32 @@
-import { Avatar, Box, Flex, Text, Truncate } from "@primer/components"
+import { Avatar } from "@material-ui/core"
+import { Box, Flex, FlexProps, Text, Truncate } from "@primer/components"
 import React from "react"
+import styled from "styled-components"
 
 import { SteamUser, teamColor, icon, armorIcon } from "."
 
-export const PlayerCard: React.VFC<{
-  player: Player
-  steam?: SteamUser
-}> = ({ player, steam }) => {
+const PlayerCardBase: React.VFC<
+  FlexProps & {
+    player: Player
+    steamUser?: SteamUser
+  }
+> = ({ player, steamUser, ...props }) => {
   return (
-    <Flex>
-      <Box>
-        <a href={steam?.profileurl} rel="noopener noreferrer">
-          <Avatar src={steam?.avatar} size={48} square />
-        </a>
-      </Box>
+    <Flex {...props} alignItems="center" style={{ gap: 8 }}>
+      <a href={steamUser?.profileurl} rel="noopener noreferrer">
+        <Avatar src={steamUser?.avatar} />
+      </a>
       <Box flexGrow={1}>
         <Flex style={{ gap: 8 }}>
           <Text fontWeight="bold">{player.Hp}</Text>
-          <Truncate title={player.Name} style={{ flexGrow: 1 }}>
-            <Text fontWeight="bold" color={teamColor(player.Team)}>
-              {player.Name}
-            </Text>
+          <Truncate
+            title={player.Name}
+            style={{ flexGrow: 1 }}
+            color={teamColor(player.Team)}
+            fontWeight="bold"
+            maxWidth={100}
+          >
+            {player.Name}
           </Truncate>
           <Text fontWeight="bold" textAlign="right" color="#131">
             ${player.Money}
@@ -40,3 +46,5 @@ export const PlayerCard: React.VFC<{
     </Flex>
   )
 }
+
+export const PlayerCard = styled(PlayerCardBase)``

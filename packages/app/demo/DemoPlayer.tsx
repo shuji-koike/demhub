@@ -154,6 +154,8 @@ const StyledForm = styled.form`
     top: 60px;
     right: 4px;
     width: 250px;
+    max-height: calc(100vh - 60px - 100px);
+    overflow-y: auto;
   }
   > footer {
     position: fixed;

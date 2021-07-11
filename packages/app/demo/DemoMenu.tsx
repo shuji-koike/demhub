@@ -1,4 +1,4 @@
-import { Text, Flex } from "@primer/components"
+import { Flex, Text } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
@@ -36,8 +36,8 @@ export const DemoMenu: React.VFC<{
     }
   }, [tab, round])
   return (
-    <StyledDemoMenu>
-      <nav>
+    <div onWheelCapture={(e) => e.stopPropagation()}>
+      <StyledNav>
         <button onClick={() => setTab(1)}>Players</button>
         <button onClick={() => setTab(2)}>Kills</button>
         <button onClick={() => setTab(3)}>Nades</button>
@@ -50,42 +50,51 @@ export const DemoMenu: React.VFC<{
           />
           All
         </label>
-      </nav>
-      <div onWheelCapture={(e) => e.stopPropagation()}>
-        {filter.players &&
-          frame?.Players.filter(filter.players).map((e) => (
-            <PlayerCard key={e.ID} player={e} steam={steam?.[e.ID]} />
-          ))}
-        {filter.kills &&
-          match.KillEvents.filter(filter.kills).map((e, i) => (
-            <p key={i} onClick={() => setTick?.(e.Tick)}>
-              <PlayerLabel player={findPlayer(match, e.Killer)} />
-              <img height={16} src={icon(e.Weapon)} />
-              {!!e.Penetrated && <span>(P)</span>}
-              {e.IsHeadshot && <span>(H)</span>}
-              <PlayerLabel player={findPlayer(match, e.Victim)} />
-            </p>
-          ))}
-        {filter.nades &&
-          match.NadeEvents.filter(filter.nades).map((e, i) => (
-            <p key={i} onClick={() => setTick?.(e.Tick)}>
-              <img height={16} src={icon(e.Weapon)} />
-              <PlayerLabel player={findPlayer(match, e.Thrower)} />
-            </p>
-          ))}
-      </div>
-    </StyledDemoMenu>
+      </StyledNav>
+      {filter.players &&
+        frame?.Players.filter(filter.players).map((e) => (
+          <PlayerCard
+            key={e.ID}
+            player={e}
+            steamUser={steam?.[e.ID]}
+            marginY={1}
+          />
+        ))}
+      {filter.kills &&
+        match.KillEvents.filter(filter.kills).map((e, i) => (
+          <Flex
+            key={i}
+            onClick={() => setTick?.(e.Tick)}
+            marginY={1}
+            style={{ gap: 8 }}
+          >
+            <PlayerLabel player={findPlayer(match, e.Killer)} />
+            <img height={16} src={icon(e.Weapon)} />
+            {!!e.Penetrated && <span>(P)</span>}
+            {e.IsHeadshot && <span>(H)</span>}
+            <PlayerLabel player={findPlayer(match, e.Victim)} />
+          </Flex>
+        ))}
+      {filter.nades &&
+        match.NadeEvents.filter(filter.nades).map((e, i) => (
+          <Flex
+            key={i}
+            onClick={() => setTick?.(e.Tick)}
+            marginY={1}
+            style={{ gap: 8 }}
+          >
+            <img height={16} src={icon(e.Weapon)} />
+            <PlayerLabel player={findPlayer(match, e.Thrower)} />
+          </Flex>
+        ))}
+    </div>
   )
 }
 
-const StyledDemoMenu = styled.div`
-  max-height: calc(100vh - 60px - 100px);
-  overflow-y: auto;
-  > nav {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
+const StyledNav = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 1;
 `
 
 const PlayerLabel: React.VFC<{
