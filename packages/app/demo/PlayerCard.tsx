@@ -3,7 +3,8 @@ import { Box, Flex, FlexProps, Text, Truncate } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
-import { SteamUser, teamColor, icon, armorIcon } from "."
+import { teamColor, icon, armorIcon } from "."
+import { SteamUser } from "../store/steam"
 
 const PlayerCardBase: React.VFC<
   FlexProps & {

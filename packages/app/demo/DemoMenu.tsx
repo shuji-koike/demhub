@@ -2,7 +2,8 @@ import { Flex, Text } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
-import { findPlayer, icon, SteamUser, teamColor } from "."
+import { findPlayer, icon, teamColor } from "."
+import { useSteamUsers } from "../store/steam"
 import { Filter } from "./DemoPlayer"
 import { PlayerCard } from "./PlayerCard"
 
@@ -11,10 +12,10 @@ export const DemoMenu: React.VFC<{
   round?: Round
   frame?: Frame
   setTick?: (tick: number | undefined) => void
-  steam?: Record<string, SteamUser>
   filter: Filter
   setFilter: (e: Filter) => void
-}> = ({ match, round, frame, setTick, steam, filter, setFilter }) => {
+}> = ({ match, round, frame, setTick, filter, setFilter }) => {
+  const steamUsers = useSteamUsers(frame?.Players.map((e) => e.ID))
   const [tab, setTab] = React.useState(1)
   React.useEffect(() => {
     switch (tab) {
@@ -56,7 +57,7 @@ export const DemoMenu: React.VFC<{
           <PlayerCard
             key={e.ID}
             player={e}
-            steamUser={steam?.[e.ID]}
+            steamUser={steamUsers[e.ID]}
             marginY={1}
           />
         ))}
