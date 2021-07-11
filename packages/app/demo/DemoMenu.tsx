@@ -1,4 +1,4 @@
-import { Text } from "@primer/components"
+import { Text, Flex } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
@@ -51,7 +51,7 @@ export const DemoMenu: React.VFC<{
           All
         </label>
       </nav>
-      <section onWheelCapture={(e) => e.stopPropagation()}>
+      <div onWheelCapture={(e) => e.stopPropagation()}>
         {filter.players &&
           frame?.Players.filter(filter.players).map((e) => (
             <PlayerCard key={e.ID} player={e} steam={steam?.[e.ID]} />
@@ -73,7 +73,7 @@ export const DemoMenu: React.VFC<{
               <PlayerLabel player={findPlayer(match, e.Thrower)} />
             </p>
           ))}
-      </section>
+      </div>
     </StyledDemoMenu>
   )
 }
